@@ -9,7 +9,7 @@ const FloatingCandy = ({ emoji, className, delay = 0 }) => (
   </div>
 );
 
-const LoadingScreen = () => {
+const Loadingscreen = () => {
   return (
     <div className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-background transition-colors">
       <div className="absolute inset-0 pointer-events-none">
@@ -54,4 +54,4 @@ const LoadingScreen = () => {
   );
 };
 
-export default LoadingScreen;
+export default Loadingscreen;

@@ -6,7 +6,8 @@ import Index from "./pages/Index";
 import { getCurrentUser } from "./api";
 import { setUser, clearUser, setAuthLoading } from "./slices/authSlice";
 import { Toaster } from "sonner";
-import LoadingScreen from "./components/Loadingscreen";
+import Loadingscreen from "./components/Loadingscreen";
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const App = () => {
   }, [dispatch]);
 
   if (appLoading || authLoading) {
-    return <LoadingScreen />;
+    return <Loadingscreen />;
   }
 
   return (
