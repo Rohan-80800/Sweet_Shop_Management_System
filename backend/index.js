@@ -17,13 +17,23 @@ const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL];
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
+      if (!origin) return callback(null, true);
+
+      if (origin === "http://localhost:5173") {
+        return callback(null, true);
       }
+      if (
+        origin === process.env.FRONTEND_URL 
+      ) {
+        return callback(null, true);
+      }
+
+      console.warn("CORS blocked origin:", origin);
+      return callback(null, false);
     },
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 app.use(express.json());
