@@ -9,6 +9,7 @@ import cors from "cors";
 import isAuth from "./middlewares/isAuth.js";
 
 const app = express();
+app.set("trust proxy", 1);
 const port = process.env.PORT || 5000;
 
 const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL];

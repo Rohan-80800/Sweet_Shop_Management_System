@@ -1,23 +1,32 @@
 import { ThemeProvider } from "next-themes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Index from "./pages/Index";
 import { getCurrentUser } from "./api";
 import { setUser, clearUser, setAuthLoading } from "./slices/authSlice";
-import LoadingScreen from "./components/Loadingscreen";
 import { Toaster } from "sonner";
+import LoadingScreen from "./components/Loadingscreen";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
+  const { loading: authLoading } = useSelector((state) => state.auth);
+
+  const [appLoading, setAppLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAppLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const hydrateAuth = async () => {
       dispatch(setAuthLoading(true));
       try {
         const res = await getCurrentUser();
-        console.log(res);
         dispatch(setUser(res.data));
       } catch {
         dispatch(clearUser());
@@ -29,7 +38,7 @@ const App = () => {
     hydrateAuth();
   }, [dispatch]);
 
-  if (loading) {
+  if (appLoading || authLoading) {
     return <LoadingScreen />;
   }
 

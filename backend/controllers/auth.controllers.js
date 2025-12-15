@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import genToken from "../utils/token.js";
 
+const isProd = process.env.NODE_ENV === "production";
+
 export const signUp = async (req, res) => {
   try {
     const { fullName, email, password, role } = req.body;
@@ -34,8 +36,8 @@ export const signUp = async (req, res) => {
     const token = await genToken(user);
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "none",
-      secure: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -77,8 +79,8 @@ export const signIn = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "none",
-      secure: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
