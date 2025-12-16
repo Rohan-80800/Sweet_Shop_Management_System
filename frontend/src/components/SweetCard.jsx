@@ -4,10 +4,13 @@ import { ShoppingCart, Plus, Minus, Check } from "lucide-react";
 import { toast } from "sonner";
 import { addToCart } from "../slices/cartSlice";
 import { useSelector } from "react-redux";
+import { updateSweetQuantity } from "../slices/sweetSlice";
 
 const SweetCard = ({ sweet, index }) => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const isAdmin = useSelector((state) => state.auth.isAdmin);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [isPurchasing, setIsPurchasing] = useState(false);
@@ -22,7 +25,6 @@ const SweetCard = ({ sweet, index }) => {
     }
   }, [cartItem]);
 
-
   const handlePurchase = async () => {
     if (sweet.quantity === 0) return;
     setIsPurchasing(true);
@@ -35,6 +37,12 @@ const SweetCard = ({ sweet, index }) => {
           price: sweet.price,
           image: sweet.image,
           category: sweet.category
+        })
+      );
+      dispatch(
+        updateSweetQuantity({
+          sweetId: sweet._id,
+          quantity
         })
       );
       setShowSuccess(true);
@@ -91,7 +99,7 @@ const SweetCard = ({ sweet, index }) => {
             {sweet.quantity} in stock
           </span>
         </div>
-        {!isAdmin && !isOutOfStock && (
+        {isLoggedIn && !isAdmin && !isOutOfStock && (
           <div className="flex items-center gap-3 mb-4">
             <span className="text-sm text-muted-foreground">Qty:</span>
             <div className="flex items-center gap-2 bg-muted rounded-full px-2 py-1">
@@ -102,7 +110,9 @@ const SweetCard = ({ sweet, index }) => {
               >
                 <Minus className="w-4 h-4" />
               </button>
+
               <span className="w-8 text-center font-semibold">{quantity}</span>
+
               <button
                 onClick={() =>
                   setQuantity(Math.min(sweet.quantity, quantity + 1))
@@ -115,7 +125,8 @@ const SweetCard = ({ sweet, index }) => {
             </div>
           </div>
         )}
-        {!isAdmin && (
+
+        {isLoggedIn && !isAdmin && (
           <button
             onClick={handlePurchase}
             disabled={isOutOfStock || isPurchasing}

@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Index from "./pages/Index";
-import { getCurrentUser } from "./api";
+import { getAllSweets, getCurrentUser } from "./api";
 import { setUser, clearUser, setAuthLoading } from "./slices/authSlice";
 import { Toaster } from "sonner";
 import Loading from "./components/Loading";
-
+import { setSweets } from "./slices/sweetSlice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,11 @@ const App = () => {
   useEffect(() => {
     const hydrateAuth = async () => {
       dispatch(setAuthLoading(true));
+
       try {
+        const sweetsRes = await getAllSweets();
+        dispatch(setSweets(sweetsRes.data));
+
         const res = await getCurrentUser();
         dispatch(setUser(res.data));
       } catch {

@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
 import sweetRouter from "./routes/sweet.routes.js";
 import cors from "cors";
-import isAuth from "./middlewares/isAuth.js";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -40,7 +39,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
-app.use("/api/sweets", isAuth, sweetRouter);
+app.use("/api/sweets",sweetRouter);
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => {

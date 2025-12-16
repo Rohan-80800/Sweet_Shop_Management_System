@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", isAuth, getSweets);
+router.get("/",getSweets);
 router.get("/search", isAuth, searchSweets);
 
 router.post(

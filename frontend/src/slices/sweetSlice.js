@@ -60,8 +60,15 @@ const sweetsSlice = createSlice({
       if (index !== -1) {
         state.sweets[index] = {
           ...action.payload,
-          color: state.sweets[index].color 
+          color: state.sweets[index].color
         };
+      }
+    },
+    updateSweetQuantity: (state, action) => {
+      const { sweetId, quantity } = action.payload;
+      const sweet = state.sweets.find((s) => s._id === sweetId);
+      if (sweet) {
+        sweet.quantity -= quantity;
       }
     }
   }
@@ -74,6 +81,7 @@ export const {
   addSweetLocal,
   updateSweetLocal,
   deleteSweetLocal,
-  updateStockLocal
+  updateStockLocal,
+  updateSweetQuantity
 } = sweetsSlice.actions;
 export default sweetsSlice.reducer;
