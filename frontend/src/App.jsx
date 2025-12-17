@@ -1,6 +1,6 @@
 import { ThemeProvider } from "next-themes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Index from "./pages/Index";
 import { getAllSweets, getCurrentUser } from "./api";
@@ -12,16 +12,6 @@ import { setSweets } from "./slices/sweetSlice";
 const App = () => {
   const dispatch = useDispatch();
   const { loading: authLoading } = useSelector((state) => state.auth);
-
-  const [appLoading, setAppLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAppLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const hydrateAuth = async () => {
@@ -43,7 +33,7 @@ const App = () => {
     hydrateAuth();
   }, [dispatch]);
 
-  if (appLoading || authLoading) {
+  if (authLoading) {
     return <Loading />;
   }
 
